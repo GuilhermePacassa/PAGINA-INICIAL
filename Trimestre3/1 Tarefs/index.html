@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Notas do Instituto Médio Comercial de Luanda</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            background-color: #f0f2f5;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #eee;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .apto {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .nao-apto {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .btn-add {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #f1c40f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .btn-del {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Gestão de Avaliações</h2>
+    <button class="btn-add" onclick="processarNotas()">+ Lançar Novas Notas</button>
+
+    <table id="tabelaNotas">
+        <thead>
+            <tr>
+                <th>Nota 1</th>
+                <th>Nota 2</th>
+                <th>Nota 3</th>
+                <th>Média</th>
+                <th>Resultado</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        function calcularResultado(n1, n2, n3) {
+            const media = (n1 + n2 + n3) / 3;
+            const status = media >= 10 ? "Apto" : "Não Apto";
+            const classe = media >= 10 ? "apto" : "nao-apto";
+            return { media: media.toFixed(1), status, classe };
+        }
+
+        function processarNotas() {
+            const n1 = parseFloat(prompt("Nota 1:"));
+            const n2 = parseFloat(prompt("Nota 2:"));
+            const n3 = parseFloat(prompt("Nota 3:"));
+
+            if (isNaN(n1) || isNaN(n2) || isNaN(n3)) return alert("Dados inválidos!");
+
+            const res = calcularResultado(n1, n2, n3);
+            const corpo = document.querySelector("#tabelaNotas tbody");
+            const linha = corpo.insertRow();
+
+            linha.innerHTML = `
+                <td>${n1}</td>
+                <td>${n2}</td>
+                <td>${n3}</td>
+                <td>${res.media}</td>
+                <td class="${res.classe}">${res.status}</td>
+                <td>
+                    <button class="btn-edit" onclick="editarLinha(this)">Editar</button>
+                    <button class="btn-del" onclick="apagarLinha(this)">Apagar</button>
+                </td>
+            `;
+        }
+
+        function apagarLinha(btn) {
+            if (confirm("Tens a certeza que queres apagar esta nota?")) {
+                const linha = btn.parentNode.parentNode;
+                linha.remove();
+            }
+        }
+
+        function editarLinha(btn) {
+            const linha = btn.parentNode.parentNode;
+            const celulas = linha.getElementsByTagName("td");
+
+            const n1 = parseFloat(prompt("Nova Nota 1:", celulas[0].innerText));
+            const n2 = parseFloat(prompt("Nova Nota 2:", celulas[1].innerText));
+            const n3 = parseFloat(prompt("Nova Nota 3:", celulas[2].innerText));
+
+            if (isNaN(n1) || isNaN(n2) || isNaN(n3)) return alert("Dados inválidos!");
+
+            const res = calcularResultado(n1, n2, n3);
+
+            celulas[0].innerText = n1;
+            celulas[1].innerText = n2;
+            celulas[2].innerText = n3;
+            celulas[3].innerText = res.media;
+            celulas[4].innerText = res.status;
+            celulas[4].className = res.classe;
+        }
+    </script>
+</body>
+
+</html>
