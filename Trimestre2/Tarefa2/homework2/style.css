@@ -1,0 +1,29 @@
+/* Estilo geral da página */
+body{
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+}
+
+/* Seletor de elemento */
+p{
+    font-size: 18px;
+    text-align: justify;
+}
+
+/* Seletor de ID */
+#titulo{
+    color: blue;
+    text-align: center;
+}
+
+/* Seletor de classe */
+.texto{
+    color: green;
+}
+
+/* Outro seletor de ID */
+#destaque{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
